@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 @Entity
-@Table(name = "cliente" , schema =   "clientes")
+@Table(name = "cliente" )
 public class Cliente  implements Serializable{
 
 	private static final long serialVersionUID = 1L;

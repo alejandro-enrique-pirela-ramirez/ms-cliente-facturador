@@ -20,27 +20,32 @@ public class ClienteDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    
+    public interface Manual {
+    }
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer idCliente;
 
-    @NotBlank(message = "El tipo de documento es obligatorio")
-    @Pattern(regexp = "^(DNI|RUC|CARNET_EXTRANJERIA)$",
+    @NotBlank(groups = Manual.class, message = "El tipo de documento es obligatorio")
+    @Pattern(groups = Manual.class, regexp = "^(DNI|RUC|CARNET_EXTRANJERIA)$",
              message = "El tipo de documento debe ser DNI, RUC o CARNET_EXTRANJERIA")
     private String tipoDocumento;
 
-    @NotBlank(message = "El número de documento es obligatorio")
-    @Pattern(regexp = "^[A-Za-z0-9]{8,12}$",
+    @NotBlank(groups = Manual.class, message = "El número de documento es obligatorio")
+    @Pattern(groups = Manual.class, regexp = "^[A-Za-z0-9]{8,12}$",
              message = "El número de documento debe tener entre 8 y 12 caracteres alfanuméricos")
     private String numeroDocumento;
 
-    @NotBlank(message = "El nombre es obligatorio")
-    @Size(min = 2, max = 200, message = "El nombre debe tener entre 2 y 200 caracteres")
+    @NotBlank(groups = Manual.class, message = "El nombre es obligatorio")
+    @Size(groups = Manual.class, min = 2, max = 200,
+          message = "El nombre debe tener entre 2 y 200 caracteres")
     private String nombre;
 
-    @Size(max = 250, message = "La dirección no puede superar los 250 caracteres")
+    @Size(groups = Manual.class, max = 250,
+          message = "La dirección no puede superar los 250 caracteres")
     private String direccion;
 
+    // Sin grupo (Default): se valida en los 3 registros
     @Size(max = 100, message = "El correo no puede superar los 100 caracteres")
     @Pattern(regexp = "^$|^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+$",
              message = "El correo no tiene un formato válido")
@@ -54,7 +59,8 @@ public class ClienteDto implements Serializable {
      * DNI: 8 dígitos | RUC: 11 dígitos | CARNET_EXTRANJERIA: 9 a 12 caracteres alfanuméricos.
      */
     @JsonIgnore
-    @AssertTrue(message = "El número de documento no coincide con el tipo "
+    @AssertTrue(groups = Manual.class,
+                message = "El número de documento no coincide con el tipo "
             + "(DNI: 8 dígitos, RUC: 11 dígitos, carnet de extranjería: 9 a 12 caracteres)")
     public boolean isDocumentoConsistente() {
         if (tipoDocumento == null || numeroDocumento == null) {

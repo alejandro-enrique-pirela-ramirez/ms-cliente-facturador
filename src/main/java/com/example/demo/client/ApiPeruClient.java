@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.bean.dto.ApiDni;
 import com.example.demo.bean.dto.ApiRuc;
 
-@FeignClient(name = "apiPeruClient", url = "${apiperu.url}")
+@FeignClient(name = "apiPeruClient", url = "${apiperu.url}", configuration = FeingConfig.class)
 public interface ApiPeruClient {
 
     @GetMapping("/dni/{numero}")
