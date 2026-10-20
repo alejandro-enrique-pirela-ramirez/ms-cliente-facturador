@@ -103,6 +103,35 @@ public class ClienteModel implements ClienteUseCase {
         return clienteMapper.toDtoList(clienteRepository.findAll());
     }
 
+    /**
+     * Actualiza solo los datos editables (nombre, dirección, correo y teléfono).
+     * El tipo y número de documento no se modifican porque las facturas ya emitidas dependen de ellos.
+     */
+    @Override
+    @Transactional
+    public ClienteDto actualizar(Integer id, ClienteDto dto) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado: " + id));
+
+        validarContacto(dto);
+
+        cliente.setNombre(dto.getNombre());
+        cliente.setDireccion(dto.getDireccion());
+        cliente.setCorreo(dto.getCorreo());
+        cliente.setTelefono(dto.getTelefono());
+
+        return clienteMapper.toDto(clienteRepository.save(cliente));
+    }
+
+    @Override
+    @Transactional
+    public void eliminar(Integer id) {
+        if (!clienteRepository.existsById(id)) {
+            throw new RuntimeException("Cliente no encontrado: " + id);
+        }
+        clienteRepository.deleteById(id);
+    }
+
 
     private <T> void validar(T respuesta) {
         if (respuesta == null) {

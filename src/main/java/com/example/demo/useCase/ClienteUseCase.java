@@ -10,4 +10,6 @@ public interface ClienteUseCase {
 	    ClienteDto registrarManual(ClienteDto dto);
 	    ClienteDto buscarPorId(Integer id);
 	    List<ClienteDto> listarTodos();
+	    ClienteDto actualizar(Integer id, ClienteDto dto);
+	    void eliminar(Integer id);
 }
